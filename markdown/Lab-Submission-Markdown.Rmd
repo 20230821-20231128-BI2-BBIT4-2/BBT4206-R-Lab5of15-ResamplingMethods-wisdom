@@ -1,23 +1,46 @@
+---
+title: "Business Intelligence Project"
+author: "<WISDOM>"
+date: "<23/10/23>"
+output:
+  github_document: 
+    toc: yes
+    toc_depth: 4
+    fig_width: 6
+    fig_height: 4
+    df_print: default
+editor_options:
+  chunk_output_type: console
+---
+
+
+
 # Consider a library as the location where packages are stored.
 # Execute the following command to list all the libraries available in your
 # computer:
+```{r}
 .libPaths()
-# Then execute the following command to see which packages are available in
-# each library:
 lapply(.libPaths(), list.files)
+```
 
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 # If renv::restore() did not install the "languageserver" package (required to
 # use R for VS Code), then it can be installed manually as follows (restart R
 # after executing the command):
-
+```{r}
 if (require("languageserver")) {
   require("languageserver")
 } else {
   install.packages("languageserver", dependencies = TRUE,
                    repos = "https://cloud.r-project.org")
 }
+```
 # STEP 1. Install and Load the Required Packages ----
-## caret ----
+```{r}
 if (require("caret")) {
   require("caret")
 } else {
@@ -71,20 +94,26 @@ if (require("mlbench")) {
   install.packages("mlbench", dependencies = TRUE,
                    repos = "https://cloud.r-project.org")
 }
+```
+
+##load dataset
+```{r}
 data("PimaIndiansDiabetes")
 summary("pima_indians_diabetes")
 str("pima_indians_diabetes")
+```
 ## 1. Split the dataset ====
 # Define a 75:25 train:test data split of the dataset.
 # That is, 75% of the original data will be used to train the model and
 # 25% of the original data will be used to test the model.
 # Split the dataset into a training and test set
-train_index <- createDataPartition(PimaIndiansDiabetes$diabetes, p = 0.80, list = FALSE)
-PimaIndiansDiabetes_train <- PimaIndiansDiabetes[train_index, ]
-PimaIndiansDiabetes_test <- PimaIndiansDiabetes[-train_index, ]
 ## 2. Train a Naive Bayes classifier using the training dataset ----
 
 ### 2.a. OPTION 1: "NaiveBayes()" function in the "klaR" package ----
+```{r}
+train_index <- createDataPartition(PimaIndiansDiabetes$diabetes, p = 0.80, list = FALSE)
+PimaIndiansDiabetes_train <- PimaIndiansDiabetes[train_index, ]
+PimaIndiansDiabetes_test <- PimaIndiansDiabetes[-train_index, ]
 PimaIndiansDiabetes_model_nb_klaR <- # nolint
   klaR::NaiveBayes(diabetes ~ ., data = PimaIndiansDiabetes_train)
 
@@ -103,5 +132,4 @@ caret::confusionMatrix(PimaIndiansDiabetes_predictions_nb_e1071, PimaIndiansDiab
 # The confusion matrix can also be viewed graphically,
 # although with less information.
 plot(table(PimaIndiansDiabetes_predictions_nb_e1071, PimaIndiansDiabetes_test$diabetes))
-
-
+```
